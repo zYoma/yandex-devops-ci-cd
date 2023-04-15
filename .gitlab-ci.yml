@@ -8,9 +8,6 @@ include:
 
 build-backend-code-job:
   stage: build
-  only:
-    changes:
-    - backend/*
   script:
     - echo GE_JOB_ID=$CI_JOB_ID >> backend_job_id.env
     - cd backend
@@ -25,9 +22,6 @@ build-backend-code-job:
 
 build-frontend-code-job:
   stage: build
-  only:
-    changes:
-    - frontend/*
   script:
     - echo GE_JOB_ID=$CI_JOB_ID >> frontend_job_id.env
     - cd frontend
