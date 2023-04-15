@@ -66,11 +66,11 @@ sonarqube-backend-sast:
 
 sonarqube-frontend-sast:
   stage: test
-  image: maven:3.8-openjdk-16
+  image: sonarsource/sonar-scanner-cli
   script:
     - cd backend
     - >
-      sonar:sonar -Dsonar.qualitygate.wait=true
+      sonar-scanner -Dsonar.qualitygate.wait=true
       -Dsonar.projectKey=${SONAR_PROJECT_KEY_FRONTEND}
       -Dsonar.host.url=${SONARQUBE_URL}
       -Dsonar.login=${SONAR_LOGIN_FRONTEND}
