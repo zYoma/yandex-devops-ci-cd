@@ -14,12 +14,12 @@ build-backend-code-job:
   script:
     - echo GE_JOB_ID=$CI_JOB_ID >> backend_job_id.env
     - cd backend
-    - mvn package -Dmaven.repo.local=.${CI_PROJECT_DIR}/.m2/repository
+    - mvn package -Dmaven.repo.local=./.m2/repository
   artifacts:
     name: release-backend
     paths:
       - backend/target/sausage-store-0.0.1-SNAPSHOT.jar
-      - .m2/repository
+      - .m2/
     reports:
       dotenv: backend_job_id.env
 
@@ -46,7 +46,7 @@ spotbugs-sast:
   variables:
     COMPILE: "false"
     SAST_JAVA_VERSION: 16
-    MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/repository
+    MAVEN_REPO_PATH: $CI_PROJECT_DIR/.m2/repository
 
 telegram-notification-backend:
   stage: telegram
