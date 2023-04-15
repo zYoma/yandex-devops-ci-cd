@@ -32,33 +32,16 @@ build-frontend-code-job:
 telegram-notification-backend:
   stage: telegram
   variables:
-    ARTIFACT_URL: "$CI_JOB_URL/artifacts/file/$release-backend"
+    ARTIFACT_URL: "$CI_JOB_URL/artifacts/download?file_type=archive"
   script:
     - echo "send backend CURL"
-    - |
-      curl --fail --output "/dev/null" --silent --show-error --write-out "HTTP response: ${http_code}\n\n" \
-        --data "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"[Зимин Николай] собрал backend ${ARTIFACT_URL}\"}" \
-        --header "Content-Type: application/json" \
-        --request POST \
-        "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
+    - echo "CI_PIPELINE_URL"
+    - echo "CI_ENVIRONMENT_URL"
+    - echo "CI_PAGES_URL"
+    - echo "CI_PROJECT_URL"
+    - echo "CI_REPOSITORY_URL"
+    - echo "CI_SERVER_URL"
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
   needs:
     - build-backend-code-job
-
-telegram-notification-frontend:
-  stage: telegram
-  variables:
-    ARTIFACT_URL: "$CI_JOB_URL/artifacts/file/$release-frontend"
-  script:
-    - echo "send frontend CURL"
-    - |
-      curl --fail --output "/dev/null" --silent --show-error --write-out "HTTP response: ${http_code}\n\n" \
-        --data "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"[Зимин Николай] собрал frontend ${ARTIFACT_URL}\"}" \
-        --header "Content-Type: application/json" \
-        --request POST \
-        "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
-  rules:
-    - if: $CI_COMMIT_MESSAGE =~ /^send notification/
-  needs:
-    - build-frontend-code-job
