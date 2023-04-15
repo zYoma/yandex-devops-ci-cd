@@ -19,7 +19,7 @@ build-backend-code-job:
     name: release-backend
     paths:
       - backend/target/sausage-store-0.0.1-SNAPSHOT.jar
-      - .m2/repository
+      - ${CI_PROJECT_DIR}/.m2/
     reports:
       dotenv: backend_job_id.env
 
