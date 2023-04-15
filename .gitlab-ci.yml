@@ -55,7 +55,7 @@ telegram-notification-backend:
 telegram-notification-frontend:
   stage: telegram
   variables:
-    ARTIFACT_URL: "$CI_PROJECT_URL/-/jobs/$GE_JOB_ID/artifacts/file/$release-frontend"
+    ARTIFACT_URL: "$CI_PROJECT_URL/-/jobs/$GE_JOB_ID/artifacts/download?file_type=archive"
   script:
     - echo "send frontend CURL"
     - |
