@@ -35,12 +35,12 @@ telegram-notification-backend:
     ARTIFACT_URL: "$CI_JOB_URL/artifacts/download?file_type=archive"
   script:
     - echo "send backend CURL"
-    - echo "CI_PIPELINE_URL"
-    - echo "CI_ENVIRONMENT_URL"
-    - echo "CI_PAGES_URL"
-    - echo "CI_PROJECT_URL"
-    - echo "CI_REPOSITORY_URL"
-    - echo "CI_SERVER_URL"
+    - echo "$CI_PIPELINE_URL"
+    - echo "$CI_ENVIRONMENT_URL"
+    - echo "$CI_PAGES_URL"
+    - echo "$CI_PROJECT_URL"
+    - echo "$CI_REPOSITORY_URL"
+    - echo "$CI_SERVER_URL"
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
   needs:
