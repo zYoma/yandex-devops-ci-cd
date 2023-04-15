@@ -1,5 +1,6 @@
 stages:
   - build
+  - telegram
 
 build-backend-code-job:
   stage: build
@@ -27,7 +28,7 @@ build-frontend-code-job:
       - frontend/dist/frontend
 
 telegram-notification-backend:
-  stage: .post
+  stage: telegram
   script:
     - echo "send backend CURL"
     - |
@@ -42,7 +43,7 @@ telegram-notification-backend:
     - build-backend-code-job
 
 telegram-notification-frontend:
-  stage: .post
+  stage: telegram
   script:
     - echo "send frontend CURL"
     - |
