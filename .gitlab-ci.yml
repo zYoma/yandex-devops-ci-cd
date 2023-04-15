@@ -14,7 +14,7 @@ build-backend-code-job:
   script:
     - echo GE_JOB_ID=$CI_JOB_ID >> backend_job_id.env
     - cd backend
-    - mvn package -Dmaven.repo.local=./.m2/repository
+    - mvn package -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository
   artifacts:
     name: release-backend
     paths:
