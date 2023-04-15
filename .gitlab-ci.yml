@@ -70,7 +70,7 @@ sonarqube-frontend-sast:
   script:
     - cd backend
     - >
-      sonar-scanner -Dsonar.qualitygate.wait=true
+      sonar:sonar -Dsonar.qualitygate.wait=true
       -Dsonar.projectKey=${SONAR_PROJECT_KEY_FRONTEND}
       -Dsonar.host.url=${SONARQUBE_URL}
       -Dsonar.login=${SONAR_LOGIN_FRONTEND}
