@@ -10,6 +10,7 @@ include:
 variables:
   VERSION: 1.0.${CI_PIPELINE_ID}
   MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/repository
+  FRONTEND_ARTIFACT_URL: ${NEXUS_REPO_FRONTEND_URL}/sausage-store-front/sausage-store/${VERSION}/sausage-store-${VERSION}.tar.gz
 
 cache:
   paths:
@@ -65,7 +66,7 @@ upload-frontend-release:
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
-    - curl -v -u "${NEXUS_REPO_USER}:${NEXUS_REPO_PASS}" --upload-file sausage-store-${VERSION}.tar.gz ${NEXUS_REPO_FRONTEND_URL}/sausage-store-front/sausage-store/${VERSION}/sausage-store-${VERSION}.tar.gz
+    - curl -v -u "${NEXUS_REPO_USER}:${NEXUS_REPO_PASS}" --upload-file sausage-store-${VERSION}.tar.gz ${FRONTEND_ARTIFACT_URL}
 
 spotbugs-sast:
   dependencies:
@@ -124,12 +125,12 @@ telegram-notification-backend:
 telegram-notification-frontend:
   stage: telegram
   variables:
-    ARTIFACT_URL: "$CI_PROJECT_URL/-/jobs/$GE_JOB_ID/artifacts/download?file_type=archive"
+    ARTIFACT_URL: "${FRONTEND_ARTIFACT_URL}"
   script:
     - echo "send frontend CURL"
     - |
       curl --fail --output "/dev/null" --silent --show-error --write-out "HTTP response: ${http_code}\n\n" \
-        --data "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"[Зимин Николай] собрал frontend ${ARTIFACT_URL}\"}" \
+        --data "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"Вышла новая версия frontend сосисочной - ${VERSION}\nСкачать frontend можно по ссылке — ${ARTIFACT_URL}\"}" \
         --header "Content-Type: application/json" \
         --request POST \
         "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
