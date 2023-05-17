@@ -19,11 +19,12 @@ build-backend-code-job:
   stage: build
   script:
     - cd backend
-    - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -Dversion.application=${VERSION} -DskipTests=true package
+    - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -Dversion.application=${VERSION} -DskipTests deploy
   artifacts:
     name: release-backend
     paths:
-      - ${MAVEN_REPO_PATH}
+      - backend/target/sausage-store-0.0.1-SNAPSHOT.jar
+      - ${CI_PROJECT_DIR}/.m2/
 
 build-frontend-code-job:
   stage: build
