@@ -1,5 +1,6 @@
 stages:
   - build
+  - release
   - test
   - telegram
 
@@ -18,18 +19,21 @@ cache:
 build-backend-code-job:
   stage: build
   script:
+    - echo GE_JOB_ID=$CI_JOB_ID >> backend_job_id.env
     - cd backend
-    - mvn package -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml --batch-mode
-    - mvn deploy -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml --batch-mode -Dversion.application=${VERSION} -DskipTests
+    - mvn package -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository
   artifacts:
     name: release-backend
     paths:
       - backend/target/sausage-store-0.0.1-SNAPSHOT.jar
       - ${CI_PROJECT_DIR}/.m2/
+    reports:
+      dotenv: backend_job_id.env
 
 build-frontend-code-job:
   stage: build
   script:
+    - echo GE_JOB_ID=$CI_JOB_ID >> frontend_job_id.env
     - cd frontend
     - npm install
     - npm run build
@@ -37,6 +41,19 @@ build-frontend-code-job:
     name: release-frontend
     paths:
       - frontend/dist/frontend
+    reports:
+      dotenv: frontend_job_id.env
+
+upload-backend-release:
+  stage: release
+  only:
+    changes:
+      - backend/**/*
+  needs:
+    - build-backend-code-job
+  script:
+    - cd backend
+    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests deploy
 
 spotbugs-sast:
   dependencies:
