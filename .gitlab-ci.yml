@@ -10,6 +10,7 @@ build-backend-code-job:
   stage: build
   script:
     - cd backend
+    - mvn compile
     - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml --batch-mode -Dversion.application=${VERSION} -Dmaven.test.skip=true deploy
   artifacts:
     name: release-backend
