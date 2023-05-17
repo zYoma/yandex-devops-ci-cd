@@ -19,11 +19,11 @@ build-backend-code-job:
   stage: build
   script:
     - cd backend
-    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests=true deploy
+    - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -Dversion.application=${VERSION} -DskipTests=true deploy
   artifacts:
     name: release-backend
     paths:
-      - ${CI_PROJECT_DIR}/.m2/
+      - ${MAVEN_REPO_PATH}
 
 build-frontend-code-job:
   stage: build
