@@ -41,14 +41,14 @@ build-frontend-code-job:
 
 upload-backend-release:
   stage: release
-  needs: ["build-backend-code-job", "spotbugs-sast", "sonarqube-backend-sast"]
+  needs: ["spotbugs-sast", "sonarqube-backend-sast", "build-backend-code-job"]
   script:
     - cd backend
     - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -Dversion.application=${VERSION} -DskipTests deploy
 
 upload-frontend-release:
   stage: release
-  needs: ["build-frontend-code-job", "sonarqube-frontend-sast"]
+  needs: ["sonarqube-frontend-sast", "build-frontend-code-job"]
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
