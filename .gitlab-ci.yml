@@ -19,8 +19,8 @@ build-backend-code-job:
   stage: build
   script:
     - cd backend
-    - mvn package -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml
-    - mvn deploy -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -Dversion.application=${VERSION} -DskipTests
+    - mvn package -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml --batch-mode
+    - mvn deploy -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml --batch-mode -Dversion.application=${VERSION} -DskipTests
   artifacts:
     name: release-backend
     paths:
