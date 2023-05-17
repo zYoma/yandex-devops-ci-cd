@@ -1,7 +1,7 @@
 stages:
   - build
-  - release
   - test
+  - release
   - telegram
 
 include:
@@ -11,7 +11,7 @@ variables:
   VERSION: 1.0.${CI_PIPELINE_ID}
   MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/repository
   FRONTEND_ARTIFACT_URL: ${NEXUS_REPO_FRONTEND_URL}/sausage-store-front/sausage-store/${VERSION}/sausage-store-${VERSION}.tar.gz
-  BACKEND_ARTIFACT_URL: ${NEXUS_REPO_BACKEND_URL}/sausage-store/com/yandex/practicum/devops/sausage-store/${VERSION}/sausage-store-${VERSION}.jar
+  BACKEND_ARTIFACT_URL: ${NEXUS_REPO_BACKEND_URL}/sausage-store/com/yandex/practicum/devops/sausage-store/${BACKEND_VERSION}/sausage-store-${BACKEND_VERSION}.jar
 
 cache:
   paths:
