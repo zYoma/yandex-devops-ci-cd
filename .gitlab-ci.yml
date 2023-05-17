@@ -50,6 +50,8 @@ upload-backend-release:
   stage: release
   needs:
     - build-backend-code-job
+    - stage: test
+
   script:
     - cd backend
     - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests package
@@ -58,6 +60,7 @@ upload-frontend-release:
   stage: release
   needs:
     - build-frontend-code-job
+    - stage: test
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
