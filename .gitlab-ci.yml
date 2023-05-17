@@ -137,4 +137,4 @@ telegram-notification-frontend:
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
   needs:
-    - build-frontend-code-job
+    - upload-frontend-release
