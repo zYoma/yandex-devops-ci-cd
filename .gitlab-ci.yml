@@ -47,9 +47,6 @@ build-frontend-code-job:
 
 upload-backend-release:
   stage: release
-  only:
-    changes:
-      - backend/**/*
   needs:
     - build-backend-code-job
   script:
@@ -58,9 +55,6 @@ upload-backend-release:
 
 upload-frontend-release:
   stage: release
-  only:
-    changes:
-    - frontend/**/*
   needs:
     - build-frontend-code-job
   script:
@@ -120,7 +114,7 @@ telegram-notification-backend:
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
   needs:
-    - build-backend-code-job
+    - upload-backend-release
 
 telegram-notification-frontend:
   stage: telegram
