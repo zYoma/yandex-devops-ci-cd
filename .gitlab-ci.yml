@@ -27,6 +27,7 @@ build-backend-code-job:
     name: release-backend
     paths:
       - ${CI_PROJECT_DIR}/.m2/
+      - backend/target/sausage-store-${VERSION}.jar
 
 build-frontend-code-job:
   stage: build
