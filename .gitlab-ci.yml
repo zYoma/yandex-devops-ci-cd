@@ -48,9 +48,7 @@ build-frontend-code-job:
 
 upload-backend-release:
   stage: release
-  needs:
-    - build-backend-code-job
-    - stage: test
+  needs: ["spotbugs-sast", "sonarqube-backend-sast", "build-backend-code-job"]
 
   script:
     - cd backend
@@ -58,9 +56,7 @@ upload-backend-release:
 
 upload-frontend-release:
   stage: release
-  needs:
-    - build-frontend-code-job
-    - stage: test
+  needs: ["sonarqube-frontend-sast", "build-frontend-code-job"]
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
