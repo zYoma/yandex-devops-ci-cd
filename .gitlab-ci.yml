@@ -6,12 +6,20 @@ stages:
 include:
   - template: Security/SAST.gitlab-ci.yml
 
+variables:
+  VERSION: 1.0.${CI_PIPELINE_ID}
+  MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/repository
+
+cache:
+  paths:
+    - ${CI_PROJECT_DIR}/.m2/repository # для хранения зависимостей бэкенда
+    - .npm/ # для хранения зависимостей сборки фронтенда
+
 build-backend-code-job:
   stage: build
   script:
     - cd backend
-    - mvn compile
-    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml --batch-mode -Dversion.application=${VERSION} -Dmaven.test.skip=true deploy
+    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests=true deploy
   artifacts:
     name: release-backend
     paths:
