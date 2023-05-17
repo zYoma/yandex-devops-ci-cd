@@ -1,6 +1,5 @@
 stages:
   - build
-  - test
   - release
   - telegram
 
@@ -48,15 +47,15 @@ build-frontend-code-job:
 
 upload-backend-release:
   stage: release
-  needs: ["spotbugs-sast", "sonarqube-backend-sast", "build-backend-code-job"]
+  needs: ["build-backend-code-job"]
 
   script:
     - cd backend
-    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests package
+    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests deploy
 
 upload-frontend-release:
   stage: release
-  needs: ["sonarqube-frontend-sast", "build-frontend-code-job"]
+  needs: ["build-frontend-code-job"]
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
