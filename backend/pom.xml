@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.yandex.practicum.devops</groupId>
     <artifactId>sausage-store</artifactId>
-    <version>${env.BACKEND_VERSION}</version>
+
     <name>sausage-store</name>
     <description>Backend for sausage-store</description>
     <properties>
