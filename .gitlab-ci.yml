@@ -9,16 +9,12 @@ include:
 build-backend-code-job:
   stage: build
   script:
-    - echo GE_JOB_ID=$CI_JOB_ID >> backend_job_id.env
     - cd backend
-    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests deploy
+    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR} -s settings.xml -Dversion.application=${VERSION} -DskipTests deploy
   artifacts:
     name: release-backend
     paths:
-      - backend/target/sausage-store-0.0.1-SNAPSHOT.jar
       - ${CI_PROJECT_DIR}/.m2/
-    reports:
-      dotenv: backend_job_id.env
 
 build-frontend-code-job:
   stage: build
