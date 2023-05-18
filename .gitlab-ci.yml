@@ -41,7 +41,7 @@ build-frontend-code-job:
 
 upload-backend-release:
   stage: release
-  needs:
+  dependencies:
     - build-backend-code-job
   script:
     - cd backend
@@ -49,7 +49,7 @@ upload-backend-release:
 
 upload-frontend-release:
   stage: release
-  needs:
+  dependencies:
     - build-frontend-code-job
   script:
     - cd frontend/dist
