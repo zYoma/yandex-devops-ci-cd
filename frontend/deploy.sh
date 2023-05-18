@@ -7,7 +7,8 @@ sudo cp -rf sausage-store-frontend.service /etc/systemd/system/sausage-store-fro
 curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} -o sausage-store.tar.gz ${NEXUS_REPO_FRONTEND_URL}/sausage-store-front/sausage-store/${VERSION}/sausage-store-${VERSION}.tar.gz
 sudo cp ./sausage-store.tar.gz /home/front-user/sausage-store.tar.gz
 #Распаковываем
-sudo tar -xzvf /home/front-user/sausage-store.tar.gz
+cd /home/front-user/
+sudo tar -xzvf sausage-store.tar.gz
 #Обновляем конфиг systemd с помощью рестарта
 sudo systemctl daemon-reload
 #Перезапускаем сервис сосисочной
