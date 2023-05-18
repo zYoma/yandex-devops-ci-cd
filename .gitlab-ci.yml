@@ -51,13 +51,14 @@ upload-frontend-release:
   stage: release
   needs:
     - build-frontend-code-job
+    - sonarqube-frontend-sast
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
     - curl -v -u "${NEXUS_REPO_USER}:${NEXUS_REPO_PASS}" --upload-file sausage-store-${VERSION}.tar.gz ${FRONTEND_ARTIFACT_URL}
 
 spotbugs-sast:
-  needs:
+  dependencies:
     - build-backend-code-job
   variables:
     COMPILE: "false"
