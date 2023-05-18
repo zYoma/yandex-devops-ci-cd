@@ -106,9 +106,7 @@ telegram-notification-backend:
         "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
-  needs:
-    - build-backend-code-job
-    - sonarqube-backend-sast
+  dependencies:
     - upload-backend-release
 
 telegram-notification-frontend:
@@ -123,7 +121,5 @@ telegram-notification-frontend:
         "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
-  needs:
-    - build-frontend-code-job
-    - sonarqube-frontend-sast
+  dependencies:
     - upload-frontend-release
