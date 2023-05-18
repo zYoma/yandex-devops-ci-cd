@@ -42,7 +42,6 @@ build-frontend-code-job:
 upload-backend-release:
   stage: release
   needs:
-    - spotbugs-sast
     - sonarqube-backend-sast
   script:
     - cd backend
@@ -51,7 +50,6 @@ upload-backend-release:
 upload-frontend-release:
   stage: release
   needs:
-    - spotbugs-sast
     - sonarqube-frontend-sast
   script:
     - cd frontend/dist
