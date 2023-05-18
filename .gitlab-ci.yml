@@ -26,4 +26,4 @@ upload-backend-release:
     - build-backend-code-job
   script:
     - cd backend
-    - mvn clean deploy -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -Dmaven.test.skip=true
+    - mvn clean deploy -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dmaven.test.skip=true
