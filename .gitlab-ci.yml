@@ -41,16 +41,17 @@ build-frontend-code-job:
 
 upload-backend-release:
   stage: release
-  dependencies:
-    - build-backend-code-job
+  needs:
+    - spotbugs-sast
+    - sonarqube-backend-sast
   script:
     - cd backend
     - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -DskipTests deploy
 
 upload-frontend-release:
   stage: release
-  dependencies:
-    - build-frontend-code-job
+  needs:
+    - sonarqube-frontend-sast
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
@@ -106,7 +107,7 @@ telegram-notification-backend:
         "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
-  dependencies:
+  needs:
     - upload-backend-release
 
 telegram-notification-frontend:
@@ -121,5 +122,5 @@ telegram-notification-frontend:
         "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /^send notification/
-  dependencies:
+  needs:
     - upload-frontend-release
