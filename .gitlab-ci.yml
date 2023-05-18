@@ -3,29 +3,17 @@ stages:
   - release
 
 
-cache: &global_cache
-  key: global_cache
-  paths:
-    - ${CI_PROJECT_DIR}/.m2/repository # для хранения зависимостей бэкенда
-    - .npm/ # для хранения зависимостей сборки фронтенда
-
-
 
 # <--------------- Stage 1: Build ---------------------->
 
 build-backend-code-job:
   stage: build
   script:
-    - echo "BE_JOB_ID=$CI_JOB_ID" >> job_vars.env
     - cd backend
     - mvn package -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository
   artifacts:
     paths:
       - ${CI_PROJECT_DIR}/.m2/
-      - backend/target/sausage-store-0.0.1-SNAPSHOT.jar
-    reports:
-      dotenv:
-        job_vars.env
 
 
 # <--------------- Stage 3: Release --------------------->
@@ -36,6 +24,6 @@ upload-backend-release:
     - build-backend-code-job
   script:
     - cd backend
-    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -Dversion.application=${VERSION} -DskipTests deploy
+    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -DskipTests deploy
 
 
