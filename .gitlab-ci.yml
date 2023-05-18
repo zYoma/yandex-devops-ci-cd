@@ -24,5 +24,4 @@ upload-backend-release:
     - build-backend-code-job
   script:
     - cd backend
-    - mvn versions:set -DnewVersion=${VERSION}
     - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -s settings.xml -DskipTests deploy
