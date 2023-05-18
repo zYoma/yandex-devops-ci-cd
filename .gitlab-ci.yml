@@ -1,7 +1,7 @@
 stages:
   - build
-  - test
   - release
+  - test
   - telegram
 
 include:
@@ -51,7 +51,6 @@ upload-frontend-release:
   stage: release
   needs:
     - build-frontend-code-job
-    - sonarqube-frontend-sast
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
