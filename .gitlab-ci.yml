@@ -46,7 +46,7 @@ upload-backend-release:
   needs: ["spotbugs-sast", "sonarqube-backend-sast", "build-backend-code-job"]
   script:
     - cd backend
-    - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -DskipTests -Xdebug deploy
+    - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -DskipTests deploy
 
 upload-frontend-release:
   stage: release
