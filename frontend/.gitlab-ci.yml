@@ -1,7 +1,18 @@
+before_script:
+  #устанавливаем ssh-agent для удобства аутентификации по ssh
+  - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  #сохраняем сгенеренный ранее приватный ключ для раннера
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 600 ~/.ssh
+  - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
 stages:
   - build
   - release
-  - telegram
+  - deploy
 
 variables:
   VERSION: 1.0.${CI_PIPELINE_ID}
@@ -27,24 +38,18 @@ build-frontend-code-job:
 
 upload-frontend-release:
   stage: release
-  dependencies:
+  needs:
     - build-frontend-code-job
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
     - curl -v -u "${NEXUS_REPO_USER}:${NEXUS_REPO_PASS}" --upload-file sausage-store-${VERSION}.tar.gz ${FRONTEND_ARTIFACT_URL}
 
-telegram-notification-frontend:
-  stage: telegram
+deploy:
+  stage: deploy
   script:
-    - echo "send frontend CURL"
-    - |
-      curl --fail --output "/dev/null" --silent --show-error --write-out "HTTP response: ${http_code}\n\n" \
-        --data "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"Вышла новая версия frontend сосисочной - ${VERSION}\nСкачать frontend можно по ссылке — ${FRONTEND_ARTIFACT_URL}\"}" \
-        --header "Content-Type: application/json" \
-        --request POST \
-        "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
-  rules:
-    - if: $CI_COMMIT_MESSAGE =~ /^send notification/
+    - scp ./frontend/sausage-store-frontend.service ${DEV_USER}@${DEV_HOST}:/home/${DEV_USER}/sausage-store-frontend.service
+    - ssh ${DEV_USER}@${DEV_HOST} "export "CURRENT_VERSION=${VERSION}"; export "VERSION=${VERSION}"; export "DEV_HOST=${DEV_HOST}";export "NEXUS_REPO_FRONTEND_URL=${NEXUS_REPO_FRONTEND_URL}"; export "NEXUS_REPO_USER=${NEXUS_REPO_USER}"; export "NEXUS_REPO_PASS=${NEXUS_REPO_PASS}";setsid /bin/bash -s " < ./frontend/deploy.sh
   needs:
     - upload-frontend-release
+  when: manual
