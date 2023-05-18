@@ -59,6 +59,7 @@ upload-frontend-release:
 spotbugs-sast:
   dependencies:
     - build-backend-code-job
+    - build-frontend-code-job
   variables:
     COMPILE: "false"
     SAST_JAVA_VERSION: 16
