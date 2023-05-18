@@ -1,125 +1,22 @@
 stages:
-  - build
-  - test
-  - release
-  - telegram
+  - module-pipelines
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
+frontend:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/frontend/.gitlab-ci.yml"
+    strategy: depend # depend нужен, если какой-нибудь дочерний пайплайн свалился, мы знали, что общий пайплайн тоже идёт с ошибкой
+  only:
+    changes: # как только происходит изменение в папке frontend, запускается дочерний пайплайн, который лежит в этой папке
+      - frontend/**/*
 
-variables:
-  VERSION: 1.0.${CI_PIPELINE_ID}
-  MAVEN_REPO_PATH: ${CI_PROJECT_DIR}/.m2/repository
-  FRONTEND_ARTIFACT_URL: ${NEXUS_REPO_FRONTEND_URL}/sausage-store-front/sausage-store/${VERSION}/sausage-store-${VERSION}.tar.gz
-  BACKEND_ARTIFACT_URL:  ${NEXUS_REPO_BACKEND_URL}/com/yandex/practicum/devops/sausage-store/${VERSION}/sausage-store-${VERSION}.jar
-
-cache:
-  paths:
-    - ${CI_PROJECT_DIR}/.m2/repository # для хранения зависимостей бэкенда
-    - .npm/ # для хранения зависимостей сборки фронтенда
-
-build-backend-code-job:
-  stage: build
-  script:
-    - cd backend
-    - mvn package -Dmaven.repo.local=${MAVEN_REPO_PATH}
-  artifacts:
-    name: release-backend
-    paths:
-      - ${CI_PROJECT_DIR}/.m2/
-
-build-frontend-code-job:
-  stage: build
-  script:
-    - cd frontend
-    - npm install
-    - npm run build
-  artifacts:
-    name: release-frontend
-    paths:
-      - frontend/dist/frontend
-
-upload-backend-release:
-  stage: release
-  dependencies:
-    - build-backend-code-job
-  script:
-    - cd backend
-    - mvn -Dmaven.repo.local=${MAVEN_REPO_PATH} -s settings.xml -DskipTests deploy
-
-upload-frontend-release:
-  stage: release
-  dependencies:
-    - build-frontend-code-job
-  script:
-    - cd frontend/dist
-    - tar czvf sausage-store-${VERSION}.tar.gz frontend
-    - curl -v -u "${NEXUS_REPO_USER}:${NEXUS_REPO_PASS}" --upload-file sausage-store-${VERSION}.tar.gz ${FRONTEND_ARTIFACT_URL}
-
-spotbugs-sast:
-  dependencies:
-    - build-backend-code-job
-    - build-frontend-code-job
-  variables:
-    COMPILE: "false"
-    SAST_JAVA_VERSION: 16
-    MAVEN_REPO_PATH: $CI_PROJECT_DIR/.m2/repository
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-
-sonarqube-backend-sast:
-  stage: test
-  image: maven:3.8-openjdk-16
-  script:
-    - cd backend
-    - >
-      mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
-      -Dsonar.projectKey=${SONAR_PROJECT_KEY_BACKEND}
-      -Dsonar.host.url=${SONARQUBE_URL}
-      -Dsonar.login=${SONAR_LOGIN_BACKEND}
-  dependencies:
-    - build-backend-code-job
-
-sonarqube-frontend-sast:
-  stage: test
-  image: sonarsource/sonar-scanner-cli
-  script:
-    - cd frontend
-    - >
-      sonar-scanner -Dsonar.qualitygate.wait=true
-      -Dsonar.projectKey=${SONAR_PROJECT_KEY_FRONTEND}
-      -Dsonar.host.url=${SONARQUBE_URL}
-      -Dsonar.login=${SONAR_LOGIN_FRONTEND}
-  dependencies:
-    - build-frontend-code-job
-
-telegram-notification-backend:
-  stage: telegram
-  script:
-    - echo "send backend CURL"
-    - |
-      curl --fail --output "/dev/null" --silent --show-error --write-out "HTTP response: ${http_code}\n\n" \
-        --data "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"Вышла новая версия backend сосисочной - ${VERSION}\nСкачать backend можно по ссылке — ${BACKEND_ARTIFACT_URL}\"}" \
-        --header "Content-Type: application/json" \
-        --request POST \
-        "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
-  rules:
-    - if: $CI_COMMIT_MESSAGE =~ /^send notification/
-  needs:
-    - upload-backend-release
-
-telegram-notification-frontend:
-  stage: telegram
-  script:
-    - echo "send frontend CURL"
-    - |
-      curl --fail --output "/dev/null" --silent --show-error --write-out "HTTP response: ${http_code}\n\n" \
-        --data "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"Вышла новая версия frontend сосисочной - ${VERSION}\nСкачать frontend можно по ссылке — ${FRONTEND_ARTIFACT_URL}\"}" \
-        --header "Content-Type: application/json" \
-        --request POST \
-        "https://api.telegram.org/${TELEGRAM_PRIVATE_TOKEN}/sendMessage"
-  rules:
-    - if: $CI_COMMIT_MESSAGE =~ /^send notification/
-  needs:
-    - upload-frontend-release
+backend:
+  stage: module-pipelines
+  trigger:
+    include:
+      - "/backend/.gitlab-ci.yml"
+    strategy: depend
+  only:
+    changes:  # как только происходит изменение в папке backend, запускается дочерний пайплайн, который лежит в этой папке
+      - backend/**/*
