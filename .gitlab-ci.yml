@@ -15,9 +15,6 @@ cache: &global_cache
 
 build-backend-code-job:
   stage: build
-  only:
-    changes:
-    - backend/*
   script:
     - echo "BE_JOB_ID=$CI_JOB_ID" >> job_vars.env
     - cd backend
@@ -35,9 +32,6 @@ build-backend-code-job:
 
 upload-backend-release:
   stage: release
-  only:
-    changes:
-      - backend/*/
   needs:
     - build-backend-code-job
   script:
