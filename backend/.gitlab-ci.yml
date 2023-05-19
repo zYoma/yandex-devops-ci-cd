@@ -53,3 +53,6 @@ deploy:
   needs:
     - upload-backend-release
   when: manual
+  environment:
+    name: staging
+    url: https://sausage-store-stage.ru/
