@@ -56,3 +56,7 @@ deploy:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://std-017-03.praktikum-services.tech
+  only:
+    - branches
+  except:
+    - main
