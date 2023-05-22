@@ -37,25 +37,18 @@ build-frontend-code-job:
     changes:
       - frontend/**/*
 
-sonarqube-check-frontend:
+sonarqube-frontend-sast:
   stage: test
-  needs: [ "build-frontend-code-job" ]
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [ "" ]
-  variables:
-    PROJECT_NAME: "17_NURSULTAN_DIUSHALIEV_FRONTEND"
+  image: sonarsource/sonar-scanner-cli
   script:
     - cd frontend
     - >
-      sonar-scanner
-      -Dsonar.host.url=${SONAR_HOST_URL}
-      -Dsonar.login=${SONAR_TOKEN}
-      -Dsonar.projectKey="FE-Sausage-store"
-      -Dsonar.projectName=${PROJECT_NAME}
-      -Dsonar.projectVersion=${VERSION}
-      -Dsonar.qualitygate.wait=true
-
+      sudo sonar-scanner -Dsonar.qualitygate.wait=true
+      -Dsonar.projectKey=${SONAR_PROJECT_KEY_FRONTEND}
+      -Dsonar.host.url=${SONARQUBE_URL}
+      -Dsonar.login=${SONAR_LOGIN_FRONTEND}
+  dependencies:
+      - build-frontend-code-job
 
 upload-frontend-release:
   stage: release
