@@ -62,8 +62,8 @@ sonarqube-backend-sast:
       -Dsonar.projectKey=${SONAR_PROJECT_KEY_BACKEND}
       -Dsonar.host.url=${SONARQUBE_URL}
       -Dsonar.login=${SONAR_LOGIN_BACKEND}
-dependencies:
-    - build-backend-code-job
+  dependencies:
+      - build-backend-code-job
 
 upload-backend-release:
   stage: release
