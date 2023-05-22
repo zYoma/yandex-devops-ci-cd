@@ -48,9 +48,6 @@ spotbugs-sast:
     COMPILE: "false"
     SAST_JAVA_VERSION: 16
     MAVEN_REPO_PATH: $MAVEN_REPO_PATH
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
 
 sonarqube-backend-sast:
   stage: test
