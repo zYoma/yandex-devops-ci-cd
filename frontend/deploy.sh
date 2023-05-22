@@ -5,9 +5,9 @@ set -xe
 sudo cp -rf sausage-store-frontend.service /etc/systemd/system/sausage-store-frontend.service
 #Переносим артефакт в нужную папку
 curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} -o sausage-store.tar.gz ${NEXUS_REPO_FRONTEND_URL}/sausage-store-front/sausage-store/${VERSION}/sausage-store-${VERSION}.tar.gz
-sudo cp ./sausage-store.tar.gz /home/front-user/sausage-store.tar.gz
+sudo cp ./sausage-store.tar.gz /var/www-data/sausage-store.tar.gz
 #Распаковываем
-cd /home/front-user/
+cd /var/www-data/
 sudo tar -xzvf sausage-store.tar.gz
 #Обновляем конфиг systemd с помощью рестарта
 sudo systemctl daemon-reload

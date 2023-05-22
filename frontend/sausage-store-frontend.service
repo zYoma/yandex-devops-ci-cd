@@ -4,7 +4,7 @@ Description=sausage-store-frontend
 [Service]
 RemainAfterExit=yes
 ExecStart=http-server ./frontend/ -p 80 --proxy http://localhost:8080
-WorkingDirectory=/home/front-user/
+WorkingDirectory=/var/www-data/
 Restart=always
 User=front-user
 TimeoutStartSec=0
