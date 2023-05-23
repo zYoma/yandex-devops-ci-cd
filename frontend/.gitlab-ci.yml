@@ -34,6 +34,8 @@ spotbugs-sast:
     - build-frontend-code-job
   variables:
     COMPILE: "false"
+    SAST_JAVA_VERSION: 16
+    MAVEN_REPO_PATH: $CI_PROJECT_DIR/.m2/repository
   artifacts:
     reports:
       sast: gl-sast-report.json
@@ -54,7 +56,8 @@ sonarqube-frontend-sast:
 upload-frontend-release:
   stage: release
   needs:
-    - build-frontend-code-job
+    - spotbugs-sast
+    - sonarqube-frontend-sast
   script:
     - cd frontend/dist
     - tar czvf sausage-store-${VERSION}.tar.gz frontend
