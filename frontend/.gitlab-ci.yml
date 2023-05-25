@@ -66,3 +66,10 @@ deploy:
   needs:
     - upload-frontend-release
   when: manual
+  environment:
+    name: frontend/$CI_COMMIT_REF_NAME
+    url: http://std-017-03.praktikum-services.tech
+  only:
+    - branches
+  except:
+    - main
