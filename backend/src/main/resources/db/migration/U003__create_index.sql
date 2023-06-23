@@ -1,0 +1,1 @@
+DROP INDEX idx_order_product_product_id_order_id;
