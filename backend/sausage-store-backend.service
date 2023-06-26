@@ -5,6 +5,8 @@ Description=Sausage-store
 User=jarservice
 Environment=REPORT_PATH=/log/reports
 Environment=LOG_PATH=/log
+Environment=SPRING_FLYWAY_ENABLED=false
+Environment=SPRING_DATA_MONGODB_URI=mongodb://std-017-003:Testusr1234@rc1a-u0nwp06gbwh8qsoq.mdb.yandexcloud.net:27018/std-017-003?tls=true
 StandardOutput=append:/logs/backend.log
 Restart=always
 ExecStart=/usr/bin/java \
