@@ -54,10 +54,7 @@ spotbugs-sast:
 
 sonarqube-backend-sast:
   stage: test
-  image: docker:20.10.12-dind-rootless
-  before_script:
-    - until docker info; do sleep 1; done
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  image: maven:3.8-openjdk-16
   script:
     - cd backend
     - >
