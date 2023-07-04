@@ -68,7 +68,7 @@ spotbugs-sast:
 upload-backend-release:
   variables:
     GIT_STRATEGY: none
-    image: docker:20.10.12-dind-rootless
+  image: docker:20.10.12-dind-rootless
   stage: release
   before_script:
     - until docker info; do sleep 1; done
