@@ -104,7 +104,7 @@ deploy:
        export "SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}";
        export "SPRING_DATA_MONGODB_URI=${SPRING_DATA_MONGODB_URI}";
        export "NEXUS_REPO_PASS=${NEXUS_REPO_PASS}";
-       setsid /bin/bash -s " < ./backend/deploy.sh
+       setsid /bin/bash -s " < ./backend/backend_deploy.sh
   needs:
     - upload-backend-release
   when: manual
