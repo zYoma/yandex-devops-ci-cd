@@ -17,4 +17,4 @@ docker run -d --name backend \
     --restart always \
     --pull always \
     --env-file .env \
-    gitlab.praktikum-services.ru:5050/std-017-003/std-017-003/sausage-store/sausage-backend:latest
+    gitlab.praktikum-services.ru:5050/std-017-003/sausage-store/sausage-backend:latest
