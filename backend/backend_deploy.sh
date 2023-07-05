@@ -11,6 +11,7 @@ docker pull https://gitlab.praktikum-services.ru:5050/std-017-003/std-017-003/sa
 docker stop backend||true
 docker rm backend||true
 set -e
+docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
 docker run -d --name backend \
     --network=sausage_network \
     --restart always \
