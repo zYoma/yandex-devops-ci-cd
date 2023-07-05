@@ -33,7 +33,6 @@ build-backend-code-job:
       --tag $CI_REGISTRY_IMAGE/sausage-backend:$CI_COMMIT_SHA
       .
     - docker push $CI_REGISTRY_IMAGE/sausage-backend:$CI_COMMIT_SHA
-    - echo $CI_REGISTRY_IMAGE
   rules:
     - changes:
         - backend/**/*
