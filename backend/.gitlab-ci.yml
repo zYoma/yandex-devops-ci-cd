@@ -34,10 +34,6 @@ build-backend-code-job:
       .
     - docker push $CI_REGISTRY_IMAGE/sausage-backend:$CI_COMMIT_SHA
     - echo $CI_REGISTRY_IMAGE
-  artifacts:
-    name: release-backend
-    paths:
-      - ${CI_PROJECT_DIR}/.m2/
   rules:
     - changes:
         - backend/**/*
