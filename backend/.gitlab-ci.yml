@@ -54,6 +54,9 @@ sonarqube-backend-sast:
   image: maven:3.8-openjdk-16
   script:
     - cd backend
+    - export "SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb";
+    - export "SPRING_DATASOURCE_USERNAME=sa";
+    - export "SPRING_DATASOURCE_PASSWORD=password";
     - >
       mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
       -Dsonar.projectKey=${SONAR_PROJECT_KEY_BACKEND}
