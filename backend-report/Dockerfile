@@ -1,5 +1,5 @@
 FROM python:latest
-ADD app /app
+COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
 ENTRYPOINT ["python"]
