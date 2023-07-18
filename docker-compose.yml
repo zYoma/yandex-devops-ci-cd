@@ -8,8 +8,7 @@ services:
     networks:
       - sausage-store
   backend-report:
-    build:
-      context: backend-report/
+    image: gitlab.praktikum-services.ru:5050/std-017-003/sausage-store/backend-report:latest
     container_name: sausage-store-backend-report
     env_file: .env
     networks:
