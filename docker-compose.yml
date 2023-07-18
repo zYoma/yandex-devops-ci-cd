@@ -12,8 +12,6 @@ services:
       context: backend-report/
     container_name: sausage-store-backend-report
     env_file: .env
-    environment:
-      DB: ${REPORTS_MONGODB_URI}
     networks:
       - sausage-store
   frontend:
