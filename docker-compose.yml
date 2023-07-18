@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+  backend:
+    image: gitlab.praktikum-services.ru:5050/std-017-003/sausage-store/backend:latest
+    container_name: sausage-store-backend
+    env_file: .env
+    networks:
+      - sausage-store
+  backend-report:
+    build:
+      context: backend-report/
+    container_name: sausage-store-backend-report
+    env_file: .env
+    environment:
+      DB: ${REPORTS_MONGODB_URI}
+    networks:
+      - sausage-store
+  frontend:
+    image: gitlab.praktikum-services.ru:5050/std-017-003/sausage-store/frontend:latest
+    container_name: sausage-store-frontend
+    ports:
+      - "80:80"
+    networks:
+      - sausage-store
+
+networks:
+  sausage-store:
