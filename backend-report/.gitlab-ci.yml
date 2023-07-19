@@ -74,7 +74,7 @@ deploy:
     - ssh ${DEV_USER}@${DEV_HOST} 
       "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY;
        
-       echo "DB=$DB" > .env;
+       vault kv get -field=spring.data.mongo.uri secret/sausage-store/db-mongo-uri > .env;
        echo "PORT=8081" >> .env;
        docker stop sausage-store-backend-report || true;
        docker rm sausage-store-backend-report || true;
