@@ -6,7 +6,7 @@ stages:
   - deploy
 
 include:
-  - template: Security/SAST.gitlab-ci.yml
+  - remote: 'https://gitlab.com/gitlab-org/gitlab/-/raw/2851f4d5/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml'
   - project: 'templates/ci'
     file: 'DockerInDockerTemplate.yml'
 
@@ -95,6 +95,9 @@ deploy:
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - scp -i ~/.ssh/id_rsa docker-compose.yml ${DEV_USER}@${DEV_HOST}:/home/student
   script:
     - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=sausage-store jwt=$CI_JOB_JWT)"
     - ssh ${DEV_USER}@${DEV_HOST} 
@@ -104,7 +107,6 @@ deploy:
        export "SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}";
        export "SPRING_DATASOURCE_USERNAME=$(vault kv get -field=spring.datasource.username secret/sausage-store/db-username)";
        export "SPRING_DATASOURCE_PASSWORD=$(vault kv get -field=spring.datasource.password secret/sausage-store/db-password)";
-       export "SPRING_DATA_MONGODB_URI=$(vault kv get -field=spring.data.mongo.uri secret/sausage-store/db-mongo-uri)";
        setsid /bin/bash -s " < ./backend/backend_deploy.sh
   needs:
     - upload-backend-release
