@@ -47,8 +47,9 @@ pytest:
     stage: test
     image: python:3.11-slim-buster
     before_script:
-        - pip install -r requirements.txt
+        - pip install -r backend-report/requirements.txt
     script:
+        - cd backend-report
         - python3 -m unittest
     needs:
       - build-backend-report-job
