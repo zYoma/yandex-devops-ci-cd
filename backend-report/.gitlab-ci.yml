@@ -57,6 +57,7 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - scp -i ~/.ssh/id_rsa docker-compose.yml ${DEV_USER}@${DEV_HOST}:/home/student
   script:
+    - echo "$CI_JOB_JWT"
     - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=sausage-store jwt=$CI_JOB_JWT)"
     - ssh ${DEV_USER}@${DEV_HOST} 
       "export "PORT=8081"; 
