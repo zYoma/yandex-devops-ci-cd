@@ -1,10 +1,11 @@
 stages:
   - build
-#  - test
+  - test
   - release
   - deploy
 
 include:
+  - template: Security/SAST.gitlab-ci.yml
   - project: 'templates/ci'
     file: 'DockerInDockerTemplate.yml'
 
@@ -43,16 +44,26 @@ upload-backend-report-release:
     - docker tag $CI_REGISTRY_IMAGE/sausage-backend-report:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/sausage-backend-report:latest
     - docker push $CI_REGISTRY_IMAGE/sausage-backend-report:latest
 
-#pytest:
-#    stage: test
-#    image: python:3.11-slim-buster
-#    before_script:
-#        - pip install -r backend-report/requirements.txt
-#    script:
-#        - cd backend-report
-#        - python3 -m unittest
-#    needs:
-#      - build-backend-report-job
+spotbugs-sast:
+  dependencies:
+    - build-backend-report-code-job
+  variables:
+    COMPILE: "false"
+    SPRING_CLOUD_VAULT_ENABLED: "false"
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+
+pytest:
+    stage: test
+    image: python:3.11-slim-buster
+    before_script:
+        - pip install -r backend-report/requirements.txt
+    script:
+        - cd backend-report
+        - python3 -m unittest
+    needs:
+      - build-backend-report-job
 
 deploy:
   stage: deploy
