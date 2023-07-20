@@ -12,14 +12,14 @@ services:
       - VIRTUAL_PORT=8080
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
+      - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
   backend-report:
     image: gitlab.praktikum-services.ru:5050/std-017-003/sausage-store/sausage-backend-report:latest
     container_name: sausage-store-backend-report
     env_file: .env
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
+      - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
     environment:
       - DEFAULT_HOST=backend-report
     networks:
@@ -31,7 +31,7 @@ services:
       - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      -  nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
+      - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
     environment:
       - DEFAULT_HOST=backend
     networks:
