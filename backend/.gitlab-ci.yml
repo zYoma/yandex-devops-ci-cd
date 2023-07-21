@@ -98,7 +98,6 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - scp -i ~/.ssh/id_rsa docker-compose.yml ${DEV_USER}@${DEV_HOST}:/home/student
-    - scp -i ~/.ssh/id_rsa nginx.tmpl ${DEV_USER}@${DEV_HOST}:/home/student
   script:
     - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=sausage-store jwt=$CI_JOB_JWT)"
     - ssh ${DEV_USER}@${DEV_HOST} 
