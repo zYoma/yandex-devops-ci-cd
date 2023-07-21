@@ -1,9 +1,9 @@
-FROM node:16
-# Create app directory
-WORKDIR /usr/src/app
+FROM node:16 AS builder
 COPY . .
 RUN npm install \
     && npm install -g http-server \
-    && npm run build
-EXPOSE 80
-ENTRYPOINT ["http-server", "dist/frontend/", "-p", "80", "--proxy", "http://backend:8080"]
+    && npm run build \
+
+
+FROM nginxproxy/nginx-proxy
+COPY --from=builder /usr/src/appdist/frontend/ /usr/src/appdist/frontend/
