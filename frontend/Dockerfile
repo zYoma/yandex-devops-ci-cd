@@ -1,6 +1,9 @@
-FROM node:16 AS builder
+FROM node:16 as builder
+WORKDIR /usr/src/app
 COPY . .
+RUN npm install && npm run build && ls -la /usr/src/app
 
-
-FROM nginxproxy/nginx-proxy
-COPY --from=builder /usr/src/appdist/frontend/ /usr/src/appdist/frontend/
+FROM nginx:1.21.6-alpine
+WORKDIR /app
+COPY --from=builder /usr/src/app/dist/* /usr/share/nginx/html/
+EXPOSE 8080
