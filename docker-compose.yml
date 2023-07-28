@@ -9,7 +9,6 @@ services:
       - sausage-store
     environment:
       - VIRTUAL_HOST=backend
-      - VIRTUAL_PORT=8080
     healthcheck:
       test: curl --fail -s http://localhost:8080/actuator/health
       interval: 30s
@@ -24,7 +23,6 @@ services:
       - sausage-store
     environment:
       - VIRTUAL_HOST=backend
-      - VIRTUAL_PORT=8080
     healthcheck:
       test: curl --fail -s http://localhost:8080/actuator/health
       interval: 30s
@@ -35,8 +33,6 @@ services:
     image: gitlab.praktikum-services.ru:5050/std-017-003/sausage-store/sausage-backend-report:latest
     container_name: sausage-store-backend-report
     env_file: .env
-    environment:
-      - DEFAULT_HOST=backend-report
     networks:
       - sausage-store
   loadbalancer:
@@ -46,7 +42,6 @@ services:
       - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
     environment:
       - DEFAULT_HOST=backend
     networks:
