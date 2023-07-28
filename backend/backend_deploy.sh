@@ -13,17 +13,17 @@ then
   then
     docker stop green;
   fi
-  until docker container ls --filter health=healthy | grep blue
-  do
-    sleep 5
-  done
-  echo "UP green"
-  docker-compose up -d green && docker stop blue;
-else
+  docker stop blue && docker-compose up -d green;
   until docker container ls --filter health=healthy | grep green
   do
     sleep 5
   done
-  docker-compose up -d blue && docker stop green;
+  echo "UP green"
+else
+  docker stop green && docker-compose up -d blue;
+  until docker container ls --filter health=healthy | grep blue
+  do
+    sleep 5
+  done
   echo "UP blue"
 fi
