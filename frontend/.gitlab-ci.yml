@@ -76,6 +76,7 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
+    - echo "$DEV_USER@$DEV_HOST"
     - scp -i ~/.ssh/id_rsa docker-compose.yml ${DEV_USER}@${DEV_HOST}:/home/student
   script:
     - ssh ${DEV_USER}@${DEV_HOST} 
